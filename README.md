@@ -39,7 +39,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 Describe any challenges encountered while building the app.
 
 * Currently, movies with long titles bleed into the description text.
-* While working on putting in the placeholder gif, ran into issue with a non-existent .placeholder method for Glide.
+* If using new versions of Glide, must use the .apply function with the .placeholder function within Glide to implement a placeholder.
 
 ## Open-source libraries used
 
