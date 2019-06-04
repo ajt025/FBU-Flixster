@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.example.flixster.models.Config;
 import com.example.flixster.models.Movie;
 
 import java.util.ArrayList;
@@ -17,10 +19,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     // list of movies
     ArrayList<Movie> movies;
+    // config needed for image urls
+    Config config;
+    // context for rendering
+    Context context;
 
     // initialize with list
     public MovieAdapter(ArrayList<Movie> movies) {
         this.movies = movies;
+    }
+
+    public void setConfig(Config config) {
+        this.config = config;
     }
 
     // creates and inflates a new view
@@ -28,7 +38,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         // get the context and create the inflater
-        Context context = viewGroup.getContext();
+        context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         // create the view using the item_movie layout
         View movieView = inflater.inflate(R.layout.item_movie, viewGroup, false);
@@ -45,7 +55,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         viewHolder.tvTitle.setText(movie.getTitle());
         viewHolder.tvOverview.setText(movie.getOverview());
 
-        // TODO - set image using Glide
+        // build url for poster image
+        String imageUrl = config.getImageUrl(config.getPosterSize(), movie.getPosterPath());
+
+        // load image using Glide
+        Glide.with(context)
+                .load(imageUrl)
+                // todo put .placeholder method here
+                .into(viewHolder.ivPosterImage);
     }
 
     // returns the total number of items in the list
