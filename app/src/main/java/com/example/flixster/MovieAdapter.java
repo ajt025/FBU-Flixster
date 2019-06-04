@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.flixster.models.Config;
 import com.example.flixster.models.Movie;
 
@@ -61,7 +62,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         // load image using Glide
         Glide.with(context)
                 .load(imageUrl)
-                // todo put .placeholder method here
+                .apply(new RequestOptions()
+                    .placeholder(R.drawable.flicks_movie_placeholder))
                 .into(viewHolder.ivPosterImage);
     }
 
