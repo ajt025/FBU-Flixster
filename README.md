@@ -15,7 +15,7 @@ The following **stretch** features are implemented:
 * [ ] For each movie displayed, user can see the following details:
   * [ ] Title, Poster Image, Overview (Portrait mode)
   * [ ] Title, Backdrop Image, Overview (Landscape mode)
-* [ ] Display a nice default [placeholder graphic](https://guides.codepath.org/android/Displaying-Images-with-the-Glide-Library#advanced-usage) for each image during loading
+* [X] Display a nice default [placeholder graphic](https://guides.codepath.org/android/Displaying-Images-with-the-Glide-Library#advanced-usage) for each image during loading
 * [ ] Allow user to view details of the movie including ratings and popularity within a separate activity
 * [ ] Improved the user interface by experimenting with styling and coloring.
 * [ ] Apply rounded corners for the poster or background images using [Glide transformations](https://guides.codepath.org/android/Displaying-Images-with-the-Glide-Library#transformations)
@@ -39,7 +39,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 Describe any challenges encountered while building the app.
 
 * Currently, movies with long titles bleed into the description text.
-* While working on putting in the placeholder gif, ran into issue with a non-existent .placeholder method for Glide.
+* If using new versions of Glide, must use the .apply function with the .placeholder function within Glide to implement a placeholder.
 
 ## Open-source libraries used
 
