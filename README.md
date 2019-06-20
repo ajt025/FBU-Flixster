@@ -38,7 +38,6 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 Describe any challenges encountered while building the app.
 
-* Currently, movies with long titles bleed into the description text.
 * If using Glide v4, must use the .apply function with the .placeholder function within Glide to implement a placeholder.
 * If using Glide v4, must use the .apply function with .transform(new RoundedCorners(radius)) to get rounded corners on posters.
 
