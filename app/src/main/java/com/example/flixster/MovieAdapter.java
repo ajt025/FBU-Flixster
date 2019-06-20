@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.flixster.models.Config;
 import com.example.flixster.models.Movie;
@@ -59,10 +60,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         // build url for poster image
         String imageUrl = config.getImageUrl(config.getPosterSize(), movie.getPosterPath());
 
-        // load image using Glide
+        // load image using Glide w/ transformation
+        int radius = 20;
         Glide.with(context)
                 .load(imageUrl)
                 .apply(new RequestOptions()
+                    .transform(new RoundedCorners(radius))
                     .placeholder(R.drawable.flicks_movie_placeholder))
                 .into(viewHolder.ivPosterImage);
     }
