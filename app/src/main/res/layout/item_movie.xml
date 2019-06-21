@@ -28,7 +28,9 @@
         android:layout_marginLeft="98dp"
         android:layout_marginTop="0dp"
         android:text="Movie Title"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold|italic" />
 
     <TextView
         android:id="@+id/tvOverview"
@@ -40,5 +42,6 @@
         android:layout_marginStart="98dp"
         android:layout_marginLeft="98dp"
         android:layout_marginTop="2dp"
-        android:text="Movie overview and synopsis" />
+        android:text="Movie overview and synopsis"
+        android:textColor="#000000" />
 </RelativeLayout>
