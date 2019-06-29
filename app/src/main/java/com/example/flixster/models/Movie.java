@@ -13,6 +13,7 @@ public class Movie {
     public String posterPath; // only path, not full URL
     public String backdropPath; // only path, not full URL
     public Double vote_average;
+    public Integer id; // movie id for YT
 
     public Movie() {}
 
@@ -23,10 +24,7 @@ public class Movie {
         posterPath = object.getString("poster_path");
         backdropPath = object.getString("backdrop_path");
         vote_average = object.getDouble("vote_average");
-    }
-
-    public Double getVoteAverage() {
-        return vote_average;
+        id = object.getInt("id");
     }
 
     public String getTitle() {
@@ -42,4 +40,8 @@ public class Movie {
     }
 
     public String getBackdropPath() { return backdropPath; }
+
+    public Double getVoteAverage() { return vote_average; }
+
+    public int getID() { return id; }
 }
