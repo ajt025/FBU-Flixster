@@ -68,7 +68,7 @@ public class MovieListActivity extends AppCompatActivity {
         // create url
         String url = API_BASE_URL + "/movie/now_playing";
         RequestParams params = new RequestParams();
-        params.put(API_KEY_PARAM, getString(R.string.api_key)); // API key that is always required
+        params.put(API_KEY_PARAM, getString(R.string.mdb_api_key)); // API key that is always required
 
         // execute GET request that expects a JSON object response
         client.get(url, params, new JsonHttpResponseHandler() {
@@ -102,7 +102,7 @@ public class MovieListActivity extends AppCompatActivity {
         // create url
         String url = API_BASE_URL + "/configuration";
         RequestParams params = new RequestParams();
-        params.put(API_KEY_PARAM, getString(R.string.api_key)); // API key that is always required
+        params.put(API_KEY_PARAM, getString(R.string.mdb_api_key)); // API key that is always required
 
         // execute GET request that expects a JSON object response
         client.get(url, params, new JsonHttpResponseHandler() {
