@@ -1,15 +1,21 @@
 package com.example.flixster;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.transition.Explode;
+import android.transition.Slide;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.flixster.models.Config;
 import com.example.flixster.models.Movie;
@@ -40,11 +46,13 @@ public class MovieDetailsActivity extends YouTubeBaseActivity {
 
     String movieID = "";
 
-//    YouTubePlayerView player;
+    private final int radius = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        getWindow().setEnterTransition(new Slide(Gravity.RIGHT));
         setContentView(R.layout.activity_movie_details);
 
         // resolve the view objects
@@ -59,19 +67,20 @@ public class MovieDetailsActivity extends YouTubeBaseActivity {
         movie = (Movie) Parcels.unwrap(getIntent().getParcelableExtra(Movie.class.getSimpleName()));
         config = (Config) Parcels.unwrap(getIntent().getParcelableExtra(Config.class.getSimpleName()));
 
-        final String imageURL = config.getImageUrl(config.getPosterSize(), movie.getPosterPath());
+        final String imageURL = config.getImageUrl(config.getBackdropSize(), movie.getBackdropPath());
 
         getTrailer();
 
         Glide.with(this)
                 .load(imageURL)
                 .apply(new RequestOptions()
+                        .transform(new RoundedCorners(radius))
                         .placeholder(R.drawable.flicks_backdrop_placeholder))
                 .into(ivBackdrop);
 
         // set the title and overview
         tvTitle.setText(movie.getTitle());
-        tvOverview.setText(movie.getOverview());
+        tvOverview.setText('\t' + movie.getOverview());
 
         // vote average is 0..10, convert to 0..5 by dividing by 2
         float voteAverage = movie.getVoteAverage().floatValue();
@@ -88,8 +97,10 @@ public class MovieDetailsActivity extends YouTubeBaseActivity {
                 intent.putExtra("trailerID", movieID);
                 // show the activity
                 context.startActivity(intent);
+
             }
         });
+
     }
 
     private void getTrailer() {

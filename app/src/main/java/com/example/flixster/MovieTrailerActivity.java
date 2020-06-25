@@ -27,6 +27,17 @@ public class MovieTrailerActivity extends YouTubeBaseActivity {
                                                 YouTubePlayer youTubePlayer, boolean b) {
                 // do any work here to cue video, play video, etc.
                 youTubePlayer.cueVideo(videoId);
+                youTubePlayer.setFullscreen(true);
+                youTubePlayer.play();
+
+                youTubePlayer.setOnFullscreenListener(new YouTubePlayer.OnFullscreenListener() {
+                    @Override
+                    public void onFullscreen(boolean b) {
+                        if (!b) {
+                            finish();
+                        }
+                    }
+                });
             }
 
             @Override
@@ -36,5 +47,6 @@ public class MovieTrailerActivity extends YouTubeBaseActivity {
                 Log.e("MovieTrailerActivity", "Error initializing YouTube player");
             }
         });
+
     }
 }

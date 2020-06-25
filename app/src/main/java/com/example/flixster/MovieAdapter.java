@@ -1,13 +1,20 @@
 package com.example.flixster;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.recyclerview.widget.RecyclerView;
+import android.text.method.ScrollingMovementMethod;
+import android.transition.Explode;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +36,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     Config config;
     // context for rendering
     Context context;
+
+    private final int radius = 20;
 
     // initialize with list
     public MovieAdapter(ArrayList<Movie> movies) {
@@ -59,7 +68,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         Movie movie = movies.get(i);
         // populate the view with the movie data
         viewHolder.tvTitle.setText(movie.getTitle());
-        viewHolder.tvOverview.setText(movie.getOverview());
+        viewHolder.tvOverview.setText('\t' + movie.getOverview()); // indent overview
 
         // determine orientation and respective image paths
         String imageUrl;
@@ -78,7 +87,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         }
 
         // load image using Glide w/ transformation
-        int radius = 20;
         Glide.with(context)
                 .load(imageUrl)
                 .apply(new RequestOptions()
@@ -94,7 +102,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     }
 
     // create the viewholder as a static inner class
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         // track view objects
         ImageView ivPosterImage;
@@ -111,26 +119,48 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             tvOverview = (TextView) itemView.findViewById(R.id.tvOverview);
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
 
-            itemView.setOnClickListener(this);
-        }
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // gets item position
+                    int position = getAdapterPosition();
+                    // make sure the position is valid, i.e. actually exists in the view
+                    if (position != RecyclerView.NO_POSITION) {
+                        // get the movie at the position, this won't work if the class is static
+                        Movie movie = movies.get(position);
+                        // create intent for the new activity
+                        Intent intent = new Intent(context, MovieDetailsActivity.class);
+                        // serialize the movie using parceler, use its short name as a key
+                        intent.putExtra(Movie.class.getSimpleName(), Parcels.wrap(movie));
+                        // also wrap the backdrop image for later
+                        intent.putExtra(Config.class.getSimpleName(), Parcels.wrap(config));
+                        // show the activity
 
-        @Override
-        public void onClick(View v) {
-            // gets item position
-            int position = getAdapterPosition();
-            // make sure the position is valid, i.e. actually exists in the view
-            if (position != RecyclerView.NO_POSITION) {
-                // get the movie at the position, this won't work if the class is static
-                Movie movie = movies.get(position);
-                // create intent for the new activity
-                Intent intent = new Intent(context, MovieDetailsActivity.class);
-                // serialize the movie using parceler, use its short name as a key
-                intent.putExtra(Movie.class.getSimpleName(), Parcels.wrap(movie));
-                // also wrap the backdrop image for later
-                intent.putExtra(Config.class.getSimpleName(), Parcels.wrap(config));
-                // show the activity
-                context.startActivity(intent);
-            }
+                        context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(
+                                (Activity) context).toBundle());
+
+                    }
+                }
+            });
+
+
+            // handling text scrolling
+
+            tvOverview.setMovementMethod(new ScrollingMovementMethod());
+            View.OnTouchListener listener = new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    boolean isLarger;
+                    isLarger = ((TextView) v).getLineCount() * ((TextView) v).getLineHeight() > v.getHeight();
+                    if (event.getAction() == MotionEvent.ACTION_MOVE && isLarger) {
+                        v.getParent().requestDisallowInterceptTouchEvent(true);
+                    } else {
+                        v.getParent().requestDisallowInterceptTouchEvent(false);
+                    }
+                    return false;
+                }
+            };
+            tvOverview.setOnTouchListener(listener);
         }
     }
 }

@@ -1,12 +1,19 @@
 package com.example.flixster;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.transition.Slide;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
+import com.example.flixster.databinding.ActivityMovieListBinding;
 import com.example.flixster.models.Config;
 import com.example.flixster.models.Movie;
 import com.loopj.android.http.AsyncHttpClient;
@@ -24,6 +31,7 @@ import cz.msebera.android.httpclient.Header;
 public class MovieListActivity extends AppCompatActivity {
 
     // constants
+    private ActivityMovieListBinding binding; // view binding instance
     // base URL for the API
     public final static String API_BASE_URL = "https://api.themoviedb.org/3";
     // the parameter name for the API key
@@ -32,8 +40,6 @@ public class MovieListActivity extends AppCompatActivity {
     public final static String TAG = "MovieListActivity";
     // list of currently playing movies
     ArrayList<Movie> movies;
-    // the recycler view
-    RecyclerView rvMovies;
     // the adapter wired to the recycler view
     MovieAdapter adapter;
     // image config
@@ -45,7 +51,10 @@ public class MovieListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie_list);
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        getWindow().setExitTransition(new Slide(Gravity.LEFT));
+        binding = ActivityMovieListBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         // init. client
         client = new AsyncHttpClient();
@@ -55,12 +64,19 @@ public class MovieListActivity extends AppCompatActivity {
         adapter = new MovieAdapter(movies);
 
         // resolve the recycler view and connect a layout manager and the adapter
-        rvMovies = (RecyclerView) findViewById(R.id.rvMovies);
-        rvMovies.setLayoutManager(new LinearLayoutManager(this));
-        rvMovies.setAdapter(adapter);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+
+        binding.rvMovies.setLayoutManager(mLayoutManager);
+        binding.rvMovies.setAdapter(adapter);
+
+        // add dividers to movie list
+        DividerItemDecoration mDividerItemDecoration = new DividerItemDecoration(binding.rvMovies.getContext(),
+                mLayoutManager.getOrientation());
+        binding.rvMovies.addItemDecoration(mDividerItemDecoration);
 
         // get config. on app creation
         getConfiguration();
+
     }
 
     // get the list of currently playing movies from the API

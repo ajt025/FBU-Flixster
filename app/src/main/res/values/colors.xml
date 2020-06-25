@@ -3,4 +3,11 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="blackOlive">#423E37</color>
+    <color name="roseTaupe">#904E55</color>
+    <color name="alabaster">#F2EFE9</color>
+    <color name="pastelBrown">#7E6551</color>
+    <color name="charlestonGreen">#282B28</color>
+    <color name="gargoyleGas">#FFD447</color>
 </resources>
