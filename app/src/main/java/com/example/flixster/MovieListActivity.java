@@ -79,6 +79,10 @@ public class MovieListActivity extends AppCompatActivity {
 
     }
 
+    public static void print() {
+        System.out.println("wee");
+    }
+
     // get the list of currently playing movies from the API
     private void getNowPlaying() {
         // create url
